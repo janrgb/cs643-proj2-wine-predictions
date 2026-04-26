@@ -79,8 +79,6 @@ sudo apt update
 # Install Java
 sudo apt install -y default-jdk && java -version
 
-java -version
-
 sudo apt update
 
 # Install Maven build system
@@ -94,3 +92,23 @@ rm spark-4.1.1-bin-hadoop3.tgz
 # Check if spark works
 ~/spark-4.1.1-bin-hadoop3/bin/spark-shell
 ```
+
+## Running the Training
+
+### Starting the Master
+
+Go to the terminal on the **master** node and clone this repo on the home directory:
+
+```bash
+git clone https://github.com/janrgb/cs643-proj2-wine-predictions.git
+```
+
+Go inside the repo and copy `TrainingDataset.csv` to the ubuntu user's home directory:
+
+```
+mv TrainingDataset.csv ~
+```
+
+Now we are ready to start the master.
+
+- Run `~/spark-4.1.1-bin-hadoop3/sbin/start-master.sh`
