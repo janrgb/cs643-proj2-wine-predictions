@@ -27,8 +27,8 @@ public class WineQualityPrediction {
 			System.err.println("Local Usage: ./run_predictor <csv_path>\nDocker Usage: docker run wine-app <csv_path>");
 			System.exit(1);
 		}
-
-	        String testingCSVPath = args[0];
+		
+		String testingCSVPath = args[0];
 
 		SparkSession spark = SparkSession.builder()
 			.appName("Simple Application")
