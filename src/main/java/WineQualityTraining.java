@@ -23,7 +23,7 @@ public class WineQualityTraining {
 		SparkSession spark = SparkSession.builder().appName("Simple Application").getOrCreate();
 		spark.sparkContext().setLogLevel("ERROR");
 
-		String trainingCSVPath = "TrainingDataset.csv";
+		String trainingCSVPath = "/home/ubuntu/TrainingDataset.csv";
 
 		/* We need to read our training CSV data. */
 		Dataset<Row> wineTrainingDF = spark.read().option("delimiter", ";").option("header", "true").option("inferSchema", "true").csv(trainingCSVPath);

@@ -16,7 +16,11 @@ Log on to AWS and do the following:
 
 - Under **Instance Type**, it may be beneficial to select a `t3.small` instance.
 
-- Generate a key pair and save it to your local machine. You will need it later.
+- Generate a key pair and save it to your local machine with limited privileges. You will need it later.
+
+```
+chmod 400 your-key.pem
+```
 
 - Under **Network Settings**, change the SSH rule from **Anywhere** to **My IP**. Leave everything else the same.
 
@@ -93,6 +97,12 @@ rm spark-4.1.1-bin-hadoop3.tgz
 ~/spark-4.1.1-bin-hadoop3/bin/spark-shell
 ```
 
+- From your local machine, copy the .pem key to the master server. You'll need it there, too.
+
+```
+scp -i "your-key.pem" your-key.pem ubuntu@master-dns:/home/ubuntu
+```
+
 ## Running the Training
 
 ### Starting the Master
@@ -106,9 +116,66 @@ git clone https://github.com/janrgb/cs643-proj2-wine-predictions.git
 Go inside the repo and copy `TrainingDataset.csv` to the ubuntu user's home directory:
 
 ```bash
-mv TrainingDataset.csv ~
+cp TrainingDataset.csv ~
 ```
 
 Now we are ready to start the master.
 
 - Run `~/spark-4.1.1-bin-hadoop3/sbin/start-master.sh`
+
+- Run `curl localhost:8080` and examine the HTML to find the URL for your master. Take note of it.
+
+    - It will look something like: `spark://ip-<YOUR-MASTER-MACHINE-IP>.ec2.internal:7077`
+
+### Starting the Workers
+
+The master should now be running. Now we have to start the workers.
+
+- From the master machine, copy `TrainingDataset.csv` to every worker machine. You can do so with `scp`.
+
+```bash
+scp -i "your-key.pem" TrainingDataset.csv ubuntu@public-dns1:/home/ubuntu
+
+scp -i "your-key.pem" TrainingDataset.csv ubuntu@public-dns2:/home/ubuntu
+
+scp -i "your-key.pem" TrainingDataset.csv ubuntu@public-dns3:/home/ubuntu
+
+scp -i "your-key.pem" TrainingDataset.csv ubuntu@public-dns4:/home/ubuntu
+```
+
+- For every worker instance, run `spark-4.1.1-bin-hadoop3/sbin/start-worker.sh spark://ip-<YOUR-MASTER-MACHINE-IP>.ec2.internal:7077`
+
+### Running the Training App
+
+Now we can run the training app. Navigate back to your master machine.
+
+- `cd` into the git directory.
+
+- Run `mvn clean package` to get everything needed.
+
+- After that, look for a script called `run_training.sh`.
+
+```bash
+cat run_training.sh
+
+/home/ubuntu/spark-4.1.1-bin-hadoop3/bin/spark-submit \
+  --class WineQualityTraining \
+  --master spark://YOUR_SPARK_URL:7077 \
+  --executor-memory 512M \
+  --total-executor-cores 8 \
+target/simple-project-1.0.jar
+```
+
+- You should edit the `--master` option to be equal to your master's url.
+
+- The specs are fine for t3.small instances, but you may want to mess around with these if your instances are smaller than that.
+
+- When satisfied, run the script:
+
+```bash
+./run_training.sh
+```
+
+- If you see a bunch of `INFO` or `WARN` tags, don't worry about it.
+
+- You should see `pipelineModel/` outputted to the home directory of both the master and all the workers.
