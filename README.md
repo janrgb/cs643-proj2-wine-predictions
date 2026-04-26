@@ -45,4 +45,52 @@ Select one of the instances and navigate to the **Security** tab.
 
     - Set **Source** to `Custom`
 
-    - For the value of the Source, put in the ID for the security group. It should start with **sg** and then a number of characters. An example for `launch-wizard-4` would be `sg-01c83ec17fbb74aed*`
+    - For the value of the Source, put in the ID for the security group. It should start with **sg** and then a number of characters. An example for `launch-wizard-4` would be `sg-01c83ec17fbb74aed`. Yours will be different.
+
+- Hit **Save Rules**.
+
+### Renaming the Instances
+
+You will have one **master** instance and four **worker** instances for training. The last instance will be for running the prediction app both locally and with Docker.
+
+- Hover over an instance.
+
+- Select the pencil icon. From here you can rename it.
+
+- Rename one to "master", four to "worker#" where # is the number, and one to "runner".
+
+### Preparing the EC2 Instances
+
+- Click on the **master** instance and hit the **Connect** button.
+
+- Go to the **SSH Client** tab. Follow the example to SSH in.
+
+```bash
+ssh -i "your-key.pem" ubuntu@public-dns
+```
+
+- Repeat this process for all the worker machines and the runner machine.
+
+- Do the following on every EC2 instance once you get a shell to get the proper software:
+
+```bash
+sudo apt update
+
+# Install Java
+sudo apt install -y default-jdk && java -version
+
+java -version
+
+sudo apt update
+
+# Install Maven build system
+sudo apt install -y maven && mvn -v
+
+# Install Apache Spark
+curl -O https://dlcdn.apache.org/spark/spark-4.1.1/spark-4.1.1-bin-hadoop3.tgz
+tar -xzvf spark-4.1.1-bin-hadoop3.tgz
+rm spark-4.1.1-bin-hadoop3.tgz
+
+# Check if spark works
+~/spark-4.1.1-bin-hadoop3/bin/spark-shell
+```
