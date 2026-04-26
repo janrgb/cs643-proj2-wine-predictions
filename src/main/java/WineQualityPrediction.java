@@ -34,6 +34,8 @@ public class WineQualityPrediction {
 			.appName("Simple Application")
 			.getOrCreate();
 
+		spark.sparkContext().setLogLevel("ERROR");
+
 		/* We need to read our testing CSV data. */
 		Dataset<Row> wineTestingDF = spark.read().option("delimiter", ";").option("header", "true").option("inferSchema", "true").csv(testingCSVPath);
 

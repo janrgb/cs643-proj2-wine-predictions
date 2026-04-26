@@ -179,3 +179,56 @@ target/simple-project-1.0.jar
 - If you see a bunch of `INFO` or `WARN` tags, don't worry about it.
 
 - You should see `pipelineModel/` outputted to the home directory of both the master and all the workers.
+
+### Consolidating /pipelineModel
+
+These directories need to be consolidated before they can be used as a model.
+
+- Run the following on the master. Replace `WORKER_IPS` with your actual worker IPs:
+
+```bash
+for ip in WORKER_IP_1 WORKER_IP_2 WORKER_IP_3 WORKER_IP_4; do
+  rsync -avz -e "ssh -i ~/my-key.pem" ubuntu@$ip:/home/ubuntu/pipelineModel/ /home/ubuntu/pipelineModel/
+done
+```
+
+- Then run the following on the master to clean up:
+
+```bash
+mv pipelineModel/metadata/_temporary/0/task_*/part* pipelineModel/metadata/
+
+mv pipelineModel/stages/0_strIdx_*/data/_temporary/0/task_*/part* pipelineModel/stages/0_strIdx_*/data/
+mv pipelineModel/stages/0_strIdx_*/metadata/_temporary/0/task_*/part* pipelineModel/stages/0_strIdx_*/metadata/
+
+mv pipelineModel/stages/1_vecAssembler_*/metadata/_temporary/0/task_*/part* pipelineModel/stages/1_vecAssembler_*/metadata/
+
+mv pipelineModel/stages/2_stdScal_*/data/_temporary/0/task_*/part* pipelineModel/stages/2_stdScal_*/data/
+mv pipelineModel/stages/2_stdScal_*/metadata/_temporary/0/task_*/part* pipelineModel/stages/2_stdScal_*/metadata/
+
+mv pipelineModel/stages/3_logreg_*/data/_temporary/0/task_*/part* pipelineModel/stages/3_logreg_*/data/
+mv pipelineModel/stages/3_logreg_*/metadata/_temporary/0/task_*/part* pipelineModel/stages/3_logreg_*/metadata/
+
+find pipelineModel/ -name "_temporary" -type d -exec rm -rf {} +
+```
+
+- You should now have a proper `pipelineModel` that looks about the same as the one in the git repo.
+
+## Running the Testing
+
+### Setting Up the Runner
+
+This section explains how to set up the runner before moving on.
+
+- Navigate to the **runner** EC2 instance.
+
+- Clone this repo to the runner's home directory:
+
+```bash
+git clone https://github.com/janrgb/cs643-proj2-wine-predictions.git
+```
+
+### Local Running
+
+
+
+### Docker Running
