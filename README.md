@@ -105,7 +105,7 @@ git clone https://github.com/janrgb/cs643-proj2-wine-predictions.git
 
 Go inside the repo and copy `TrainingDataset.csv` to the ubuntu user's home directory:
 
-```
+```bash
 mv TrainingDataset.csv ~
 ```
 

@@ -21,6 +21,8 @@ import org.apache.spark.ml.feature.StringIndexerModel;
 public class WineQualityTraining {
 	public static void main(String[] args) throws java.io.IOException {
 		SparkSession spark = SparkSession.builder().appName("Simple Application").getOrCreate();
+		spark.sparkContext().setLogLevel("ERROR");
+
 		String trainingCSVPath = "TrainingDataset.csv";
 
 		/* We need to read our training CSV data. */
