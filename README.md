@@ -1,6 +1,6 @@
 # Wine Quality Predictions
 
-### By Janish Suneja
+##### *By Janish Suneja*
 
 ### Link to GitHub Repo:
 
