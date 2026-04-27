@@ -1,6 +1,14 @@
 # Wine Quality Predictions
 
-By Janish Suneja
+### By Janish Suneja
+
+### Link to GitHub Repo:
+
+#### [https://github.com/janrgb/cs643-proj2-wine-predictions]()
+
+### Link to Docker Hub:
+
+#### [https://hub.docker.com/repository/docker/janbivalent/wine-app/general]()
 
 ## Setting Up The Environment
 
@@ -250,5 +258,12 @@ Docker running is accomplished by pulling the image from **Docker Hub** and then
 - Then, run the following:
 
 ```
+sudo docker pull janbivalent/wine-app:latest 
 
+mkdir ~/staging
+cp YourTestDataset.csv ~/staging/.
+cd ~/staging
+sudo docker run -v $(pwd):/app/data janbivalent/wine-app:latest data/YourTestDataset.csv
 ```
+
+- Note that "YourTestDataset.csv" could be any wine dataset with the same structure as TrainingDataset.csv. A sample file, ValidationDataset.csv, is provided.
