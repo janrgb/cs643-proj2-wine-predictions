@@ -229,6 +229,26 @@ git clone https://github.com/janrgb/cs643-proj2-wine-predictions.git
 
 ### Local Running
 
+Local running is accomplished with the `run_predictor.sh` bash script in the git repo.
 
+- If you try running it without an argument, it will fail. The program takes in a CSV as input.
+
+- Provide a legitimate path and run the program.
+
+```bash
+./run_predictor.sh ValidationDataset.csv
+```
+
+- If you see a bunch of INFO or WARN tags, don't worry about it. Look for the F1-Score: it will be buried in between.
 
 ### Docker Running
+
+Docker running is accomplished by pulling the image from **Docker Hub** and then running it.
+
+- First, install Docker on the **runner**. Follow the guide at [https://docs.docker.com/engine/install/ubuntu/]()
+
+- Then, run the following:
+
+```
+
+```
